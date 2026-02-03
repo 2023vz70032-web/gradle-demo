@@ -15,6 +15,16 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+    		steps {
+        		script {
+            			withSonarQubeEnv('sonar') {
+                			sh './gradlew sonar'
+           			 }
+       			 }
+   		 }
+	]
+
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
