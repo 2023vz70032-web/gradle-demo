@@ -17,11 +17,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
     steps {
-        // Use 'sonar-token' from your screenshot
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_LOGIN')]) {
+        script {
+            def scannerHome = tool 'SonarScanner' 
+            
             withSonarQubeEnv('SonarQube') {
-                // We pass the token directly to the Gradle command
-                sh "./gradlew sonar -Dsonar.login=${SONAR_LOGIN}"
+                sh "./gradlew sonar"
             }
         }
     }
