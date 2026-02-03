@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'com.bits.mvn'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Required for JUnit 5 tests 
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    
+    // ADD THIS LINE to fix the "Failed to load JUnit Platform" error
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Required for Log4j logging in App.java [cite: 12, 13]
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    dependsOn test 
+    reports {
+        html.required = true // Generates the HTML report required for Task 1 
+    }
+}
