@@ -4,16 +4,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Pull source code from GitHub - gradle-demo repo [cite: 67]
+                // Pulls the code from the Git repository defined in the job
                 checkout scm
             }
         }
 
         stage('Build & Test') {
             steps {
-                // Use Gradle for build and test execution [cite: 68, 71]
-                // Adding jacocoTestReport to ensure coverage data is ready for SonarQube 
-                sh './gradlew clean test jar jacocoTestReport'
+               sh './gradlew clean test jar'
             }
         }
 
@@ -31,58 +29,8 @@ pipeline {
 
         stage('Archive Artifact') {
             steps {
-                // Archive the generated JAR file [cite: 73, 74]
                 archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
             }
         }
     }
 }
-[cloud@2023vz70032 gradle]$ cat build.gradle 
-plugins {
-    id 'java'
-    id 'jacoco'
-    id "org.sonarqube" version "6.0.1.5171"
-}
-
-group = 'com.bits.mvn'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    // Log4j dependencies for App.java
-    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
-    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
-
-    // JUnit 5 dependencies for AppTest.java
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-    
-    // NEW: Required for Gradle 8.x and 9.x to launch tests
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-test {
-    useJUnitPlatform()
-    // Automatically runs jacocoTestReport after tests finish
-    finalizedBy jacocoTestReport 
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        html.required = true
-        xml.required = true
-    }
-}
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "bits-ls3-2023vz70032"
-        property "sonar.projectName", "Gradle-Demo"
-        // Ensure this matches the exact location of your JaCoCo XML report
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
-    }
-} 
