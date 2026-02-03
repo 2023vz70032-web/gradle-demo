@@ -17,10 +17,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
     steps {
-        // This 'sonar-token' must match the ID in your image exactly
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+        // Use 'sonar-token' from your screenshot
+        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_LOGIN')]) {
             withSonarQubeEnv('SonarQube') {
-                sh "./gradlew sonar -Dsonar.login=${SONAR_TOKEN}"
+                // We pass the token directly to the Gradle command
+                sh "./gradlew sonar -Dsonar.login=${SONAR_LOGIN}"
             }
         }
     }
