@@ -16,23 +16,14 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-
     steps {
-
-        // Use credentialsId to pull the token you saved in Jenkins
-
+        // This 'sonar-token' must match the ID in your image exactly
         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-
             withSonarQubeEnv('SonarQube') {
-
                 sh "./gradlew sonar -Dsonar.login=${SONAR_TOKEN}"
-
             }
-
         }
-
     }
-
 }
 
         stage('Archive Artifact') {
