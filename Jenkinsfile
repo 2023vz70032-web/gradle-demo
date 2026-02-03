@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-               sh './gradlew clean test jar'
+               sh './gradlew clean test jar jacocoTestReport'
             }
         }
 
