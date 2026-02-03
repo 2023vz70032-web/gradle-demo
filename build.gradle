@@ -40,7 +40,7 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "bits-ls3-2023vz70029"
+        property "sonar.projectKey", "bits-ls3-2023vz70032"
         property "sonar.projectName", "Gradle-Demo"
         // Ensure this matches the exact location of your JaCoCo XML report
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
