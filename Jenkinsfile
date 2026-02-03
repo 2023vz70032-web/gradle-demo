@@ -16,15 +16,23 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+
     steps {
-        script {
-            def scannerHome = tool 'SonarScanner' 
-            
+
+        // Use credentialsId to pull the token you saved in Jenkins
+
+        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+
             withSonarQubeEnv('SonarQube') {
-                sh "./gradlew sonar"
+
+                sh "./gradlew sonar -Dsonar.login=${SONAR_TOKEN}"
+
             }
+
         }
+
     }
+
 }
 
         stage('Archive Artifact') {
